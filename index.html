@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ThirtyOne - Card Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            text-align: center;
+            max-width: 600px;
+            padding: 2rem;
+        }
+        
+        .logo {
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .tagline {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        
+        .description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 3rem;
+            opacity: 0.8;
+        }
+        
+        .download-section {
+            margin-bottom: 3rem;
+        }
+        
+        .download-button {
+            display: inline-block;
+            background: #4CAF50;
+            color: white;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 0.5rem;
+            transition: background 0.3s;
+        }
+        
+        .download-button:hover {
+            background: #45a049;
+        }
+        
+        .download-button.ios {
+            background: #007AFF;
+        }
+        
+        .download-button.ios:hover {
+            background: #0056CC;
+        }
+        
+        .success-message {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid #4CAF50;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            display: none;
+        }
+        
+        .success-message.show {
+            display: block;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .feature {
+            background: rgba(255,255,255,0.1);
+            padding: 1.5rem;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .feature h3 {
+            margin-bottom: 0.5rem;
+            color: #4CAF50;
+        }
+        
+        @media (max-width: 768px) {
+            .logo {
+                font-size: 3rem;
+            }
+            
+            .tagline {
+                font-size: 1.2rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🃏 ThirtyOne</div>
+        <div class="tagline">The Classic Card Game</div>
+        
+        <div class="success-message" id="successMessage">
+            <h3>✅ Email Confirmed Successfully!</h3>
+            <p>Your account has been verified. You can now sign in to the ThirtyOne app!</p>
+        </div>
+        
+        <div class="description">
+            Experience the excitement of ThirtyOne, the classic card game where strategy meets luck. 
+            Compete against intelligent AI opponents and climb the leaderboards!
+        </div>
+        
+        <div class="download-section">
+            <h3 style="margin-bottom: 1rem;">Download the Game</h3>
+            <a href="#" class="download-button ios">📱 Download for iOS</a>
+            <a href="#" class="download-button">🤖 Download for Android</a>
+        </div>
+        
+        <div class="features">
+            <div class="feature">
+                <h3>🎯 Smart AI</h3>
+                <p>Play against challenging AI opponents with different difficulty levels</p>
+            </div>
+            <div class="feature">
+                <h3>📊 Statistics</h3>
+                <p>Track your wins, losses, and improvement over time</p>
+            </div>
+            <div class="feature">
+                <h3>🏆 Achievements</h3>
+                <p>Unlock achievements and compete on global leaderboards</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check if this is an email confirmation callback
+        const urlParams = new URLSearchParams(window.location.search);
+        const accessToken = urlParams.get('access_token');
+        const type = urlParams.get('type');
+        
+        if (accessToken && type === 'signup') {
+            document.getElementById('successMessage').classList.add('show');
+            
+            // Scroll to success message
+            document.getElementById('successMessage').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }
+        
+        // Update download links when you have actual app store URLs
+        // document.querySelector('.download-button.ios').href = 'https://apps.apple.com/app/your-app';
+        // document.querySelector('.download-button:not(.ios)').href = 'https://play.google.com/store/apps/details?id=com.golackey.thirtyone';
+    </script>
+</body>
+</html>

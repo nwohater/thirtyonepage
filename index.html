@@ -194,6 +194,7 @@
         const type = urlParams.get('type');
         const error = urlParams.get('error');
         const errorDescription = urlParams.get('error_description');
+        const code = urlParams.get('code'); // Email verification code
 
         function showMessage(elementId) {
             const element = document.getElementById(elementId);
@@ -207,8 +208,12 @@
             document.getElementById('errorText').textContent =
                 errorDescription || 'There was an issue verifying your email. Please try again or contact support.';
             showMessage('errorMessage');
+        } else if (code) {
+            // Handle email verification with code parameter
+            // This indicates successful email verification
+            showMessage('successMessage');
         } else if (accessToken) {
-            // Handle successful verifications
+            // Handle successful verifications with access token
             switch (type) {
                 case 'signup':
                 case 'email_change':
@@ -227,11 +232,13 @@
         }
 
         // Optional: Log verification details for debugging
-        if (accessToken || error) {
+        if (accessToken || error || code) {
             console.log('Auth callback detected:', {
                 type,
                 hasAccessToken: !!accessToken,
                 hasRefreshToken: !!refreshToken,
+                hasCode: !!code,
+                code: code,
                 error,
                 errorDescription
             });

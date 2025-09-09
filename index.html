@@ -76,17 +76,30 @@
             background: #0056CC;
         }
         
-        .success-message {
-            background: rgba(76, 175, 80, 0.2);
-            border: 1px solid #4CAF50;
+        .message {
             border-radius: 8px;
             padding: 1.5rem;
             margin: 2rem 0;
             display: none;
         }
-        
-        .success-message.show {
+
+        .message.show {
             display: block;
+        }
+
+        .success-message {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid #4CAF50;
+        }
+
+        .error-message {
+            background: rgba(244, 67, 54, 0.2);
+            border: 1px solid #f44336;
+        }
+
+        .info-message {
+            background: rgba(33, 150, 243, 0.2);
+            border: 1px solid #2196F3;
         }
         
         .features {
@@ -128,9 +141,22 @@
         <div class="logo">🃏 ThirtyOne</div>
         <div class="tagline">The Classic Card Game</div>
         
-        <div class="success-message" id="successMessage">
+        <div class="message success-message" id="successMessage">
             <h3>✅ Email Confirmed Successfully!</h3>
-            <p>Your account has been verified. You can now sign in to the ThirtyOne app!</p>
+            <p>Your account has been verified. You can now sign in to the Thirty One app!</p>
+            <button onclick="openApp()" class="download-button" style="margin-top: 1rem;">
+                🚀 Open ThirtyOne App
+            </button>
+        </div>
+
+        <div class="message error-message" id="errorMessage">
+            <h3>❌ Verification Failed</h3>
+            <p id="errorText">There was an issue verifying your email. Please try again or contact support.</p>
+        </div>
+
+        <div class="message info-message" id="passwordResetMessage">
+            <h3>🔑 Password Reset</h3>
+            <p>Your password reset link has been processed. You can now set a new password in the app.</p>
         </div>
         
         <div class="description">
@@ -161,42 +187,73 @@
     </div>
 
     <script>
-        // Check if this is an email confirmation callback
+        // Check URL parameters for Supabase auth callbacks
         const urlParams = new URLSearchParams(window.location.search);
-        const urlHash = new URLSearchParams(window.location.hash.substring(1));
+        const accessToken = urlParams.get('access_token');
+        const refreshToken = urlParams.get('refresh_token');
+        const type = urlParams.get('type');
+        const error = urlParams.get('error');
+        const errorDescription = urlParams.get('error_description');
 
-        // Supabase can send tokens in either query params or hash fragments
-        const accessToken = urlParams.get('access_token') || urlHash.get('access_token');
-        const type = urlParams.get('type') || urlHash.get('type');
-        const error = urlParams.get('error') || urlHash.get('error');
-        const errorDescription = urlParams.get('error_description') || urlHash.get('error_description');
+        function showMessage(elementId) {
+            const element = document.getElementById(elementId);
+            element.classList.add('show');
+            element.scrollIntoView({ behavior: 'smooth' });
+        }
 
-        console.log('URL params:', { accessToken: !!accessToken, type, error, errorDescription });
-
+        // Handle different verification scenarios
         if (error) {
-            // Show error message
-            const successMessage = document.getElementById('successMessage');
-            successMessage.innerHTML = `
-                <h3>❌ Verification Failed</h3>
-                <p>There was an error verifying your email: ${errorDescription || error}</p>
-                <p>Please try registering again or contact support.</p>
-            `;
-            successMessage.style.background = 'rgba(244, 67, 54, 0.2)';
-            successMessage.style.borderColor = '#f44336';
-            successMessage.classList.add('show');
-        } else if (accessToken && (type === 'signup' || type === 'email_confirmation')) {
-            // Show success message
-            document.getElementById('successMessage').classList.add('show');
+            // Handle errors (expired link, invalid token, etc.)
+            document.getElementById('errorText').textContent =
+                errorDescription || 'There was an issue verifying your email. Please try again or contact support.';
+            showMessage('errorMessage');
+        } else if (accessToken) {
+            // Handle successful verifications
+            switch (type) {
+                case 'signup':
+                case 'email_change':
+                    // Email confirmation successful
+                    showMessage('successMessage');
+                    break;
+                case 'recovery':
+                    // Password reset link
+                    showMessage('passwordResetMessage');
+                    break;
+                default:
+                    // Generic success for other auth types
+                    showMessage('successMessage');
+                    break;
+            }
+        }
 
-            // Scroll to success message
-            document.getElementById('successMessage').scrollIntoView({
-                behavior: 'smooth'
+        // Optional: Log verification details for debugging
+        if (accessToken || error) {
+            console.log('Auth callback detected:', {
+                type,
+                hasAccessToken: !!accessToken,
+                hasRefreshToken: !!refreshToken,
+                error,
+                errorDescription
             });
+        }
 
-            // Clean up the URL after showing the message
+        // Function to attempt opening the mobile app
+        function openApp() {
+            // Try to open the app using custom URL scheme
+            const appScheme = 'thirtyone://verified';
+            const fallbackUrl = 'https://apps.apple.com/app/your-app'; // Replace with actual App Store URL
+
+            // Create a hidden iframe to attempt app opening
+            const iframe = document.createElement('iframe');
+            iframe.style.display = 'none';
+            iframe.src = appScheme;
+            document.body.appendChild(iframe);
+
+            // Fallback to app store after a delay if app doesn't open
             setTimeout(() => {
-                const cleanUrl = window.location.origin + window.location.pathname;
-                window.history.replaceState({}, document.title, cleanUrl);
+                document.body.removeChild(iframe);
+                // Uncomment when you have actual app store URLs
+                // window.location.href = fallbackUrl;
             }, 2000);
         }
 

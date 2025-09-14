@@ -310,6 +310,7 @@
         // Supabase can send tokens in either query params or hash fragments
         const accessToken = urlParams.get('access_token') || urlHash.get('access_token');
         const refreshToken = urlParams.get('refresh_token') || urlHash.get('refresh_token');
+        const code = urlParams.get('code') || urlHash.get('code'); // Authorization code
         const type = urlParams.get('type') || urlHash.get('type');
         const error = urlParams.get('error') || urlHash.get('error');
         const errorDescription = urlParams.get('error_description') || urlHash.get('error_description');
@@ -321,6 +322,7 @@
         console.log('URL params:', {
             accessToken: !!accessToken,
             refreshToken: !!refreshToken,
+            code: !!code,
             type,
             error,
             errorDescription,
@@ -345,6 +347,8 @@
         } else if (
             // Primary conditions: access token with signup/confirmation type
             (accessToken && (type === 'signup' || type === 'email_confirmation')) ||
+            // Alternative: authorization code indicates successful verification
+            code ||
             // Alternative: token_hash indicates successful verification
             tokenHash ||
             // Alternative: refresh token indicates successful auth

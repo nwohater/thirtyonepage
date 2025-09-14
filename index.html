@@ -309,11 +309,27 @@
 
         // Supabase can send tokens in either query params or hash fragments
         const accessToken = urlParams.get('access_token') || urlHash.get('access_token');
+        const refreshToken = urlParams.get('refresh_token') || urlHash.get('refresh_token');
         const type = urlParams.get('type') || urlHash.get('type');
         const error = urlParams.get('error') || urlHash.get('error');
         const errorDescription = urlParams.get('error_description') || urlHash.get('error_description');
 
-        console.log('URL params:', { accessToken: !!accessToken, type, error, errorDescription });
+        // Additional Supabase verification parameters
+        const tokenHash = urlParams.get('token_hash') || urlHash.get('token_hash');
+        const expiresAt = urlParams.get('expires_at') || urlHash.get('expires_at');
+
+        console.log('URL params:', {
+            accessToken: !!accessToken,
+            refreshToken: !!refreshToken,
+            type,
+            error,
+            errorDescription,
+            tokenHash: !!tokenHash,
+            expiresAt: !!expiresAt
+        });
+        console.log('Full URL:', window.location.href);
+        console.log('Query params:', window.location.search);
+        console.log('Hash fragment:', window.location.hash);
 
         if (error) {
             // Show error message
@@ -326,8 +342,18 @@
             successMessage.style.background = 'rgba(18, 69, 89, 0.3)';
             successMessage.style.borderColor = 'var(--navy)';
             successMessage.classList.add('show');
-        } else if (accessToken && (type === 'signup' || type === 'email_confirmation')) {
+        } else if (
+            // Primary conditions: access token with signup/confirmation type
+            (accessToken && (type === 'signup' || type === 'email_confirmation')) ||
+            // Alternative: token_hash indicates successful verification
+            tokenHash ||
+            // Alternative: refresh token indicates successful auth
+            refreshToken ||
+            // Alternative: access token with expires_at indicates successful auth
+            (accessToken && expiresAt)
+        ) {
             // Show success message
+            console.log('Showing success message for verification success');
             document.getElementById('successMessage').classList.add('show');
 
             // Scroll to success message
@@ -339,7 +365,7 @@
             setTimeout(() => {
                 const cleanUrl = window.location.origin + window.location.pathname;
                 window.history.replaceState({}, document.title, cleanUrl);
-            }, 2000);
+            }, 3000);
         }
 
         // Update download links when you have actual app store URLs

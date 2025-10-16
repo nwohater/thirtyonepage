@@ -1,0 +1,13 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.golackey.thirtyone",
+      "sha256_cert_fingerprints": [
+        "F2:9F:6B:1B:94:2B:BE:C0:38:34:21:E2:3A:69:7B:9A:D0:A3:8F:3E:EC:EF:44:45:6D:29:84:28:60:F3:03:95"
+      ]
+    }
+  }
+]
+

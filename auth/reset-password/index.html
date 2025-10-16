@@ -169,12 +169,17 @@
         const type = allParams.get('type');
         const error = allParams.get('error');
         const errorDescription = allParams.get('error_description');
+        const tokenHash = allParams.get('token_hash');
+        const code = allParams.get('code');
 
         console.log('Password reset params:', {
             type,
             hasAccessToken: !!accessToken,
             hasRefreshToken: !!refreshToken,
-            error
+            hasTokenHash: !!tokenHash,
+            hasCode: !!code,
+            error,
+            allParams: Object.fromEntries(allParams)
         });
 
         function showContent(statusHtml, actionsHtml) {
@@ -225,10 +230,10 @@
                     <a href="/" class="button">Return Home</a>
                 `
             );
-        } else if (type === 'recovery' || accessToken || refreshToken) {
-            // Valid password reset link
+        } else if (type === 'recovery' || accessToken || refreshToken || tokenHash || code) {
+            // Valid password reset link (check for any valid token parameter)
             console.log('Valid password reset link detected');
-            
+
             showContent(
                 '<div class="status success">✅ Reset link verified!</div>',
                 `
@@ -236,12 +241,12 @@
                     <button onclick="tryOpenApp()" class="button">Open ThirtyOne App</button>
                     <div class="download-links">
                         <p>Don't have the app installed?</p>
-                        <a href="https://apps.apple.com/app/your-app-id">Download for iOS</a> | 
+                        <a href="https://apps.apple.com/app/your-app-id">Download for iOS</a> |
                         <a href="https://play.google.com/store/apps/details?id=com.golackey.thirtyone">Download for Android</a>
                     </div>
                 `
             );
-            
+
             // Auto-try to open app after 1 second
             setTimeout(tryOpenApp, 1000);
         } else {

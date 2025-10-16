@@ -248,133 +248,133 @@
     </style>
 </head>
 <body>
-    <!-- Hero Section -->
-    <section class="hero-section">
-        <div class="container">
-            <div class="logo">♠️ ThirtyOne</div>
-            <div class="tagline">The Classic Card Game</div>
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="logo">♠️ ThirtyOne</div>
+        <div class="tagline">The Classic Card Game</div>
 
-            <div class="success-message" id="successMessage">
-                <h3>✅ Email Confirmed Successfully!</h3>
-                <p>Your account has been verified. You can now sign in to the ThirtyOne app!</p>
-            </div>
+        <div class="success-message" id="successMessage">
+            <h3>✅ Email Confirmed Successfully!</h3>
+            <p>Your account has been verified. You can now sign in to the ThirtyOne app!</p>
+        </div>
 
-            <div class="description">
-                Experience the timeless excitement of ThirtyOne, where strategic thinking meets the thrill of chance.
-                Challenge yourself against intelligent AI opponents and compete with players worldwide.
-            </div>
+        <div class="description">
+            Experience the timeless excitement of ThirtyOne, where strategic thinking meets the thrill of chance.
+            Challenge yourself against intelligent AI opponents and compete with players worldwide.
+        </div>
 
-            <div class="download-section">
-                <h3>Get Started Today</h3>
-                <div class="download-buttons">
-                    <a href="#" class="download-button ios">
-                        <span>📱</span>
-                        Download for iOS
-                    </a>
-                    <a href="#" class="download-button">
-                        <span>🤖</span>
-                        Download for Android
-                    </a>
-                </div>
+        <div class="download-section">
+            <h3>Get Started Today</h3>
+            <div class="download-buttons">
+                <a href="#" class="download-button ios">
+                    <span>📱</span>
+                    Download for iOS
+                </a>
+                <a href="#" class="download-button">
+                    <span>🤖</span>
+                    Download for Android
+                </a>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <!-- Features Section -->
-    <section class="features-section">
-        <h2 class="features-title">Why Choose ThirtyOne?</h2>
-        <div class="features-grid">
-            <div class="feature-card">
-                <span class="feature-icon">🎯</span>
-                <h3>Intelligent AI Opponents</h3>
-                <p>Challenge yourself against sophisticated AI players with multiple difficulty levels. Each opponent has unique playing styles and strategies to keep every game exciting.</p>
-            </div>
-            <div class="feature-card">
-                <span class="feature-icon">📊</span>
-                <h3>Detailed Statistics</h3>
-                <p>Track your progress with comprehensive statistics. Monitor your wins, losses, average scores, and improvement over time with beautiful charts and insights.</p>
-            </div>
-            <div class="feature-card">
-                <span class="feature-icon">🥇</span>
-                <h3>Global Leaderboards</h3>
-                <p>Compete with players worldwide and see how you rank. Climb the leaderboards, earn your place among the top players, and showcase your ThirtyOne mastery.</p>
-            </div>
+<!-- Features Section -->
+<section class="features-section">
+    <h2 class="features-title">Why Choose ThirtyOne?</h2>
+    <div class="features-grid">
+        <div class="feature-card">
+            <span class="feature-icon">🎯</span>
+            <h3>Intelligent AI Opponents</h3>
+            <p>Challenge yourself against sophisticated AI players with multiple difficulty levels. Each opponent has unique playing styles and strategies to keep every game exciting.</p>
         </div>
-    </section>
+        <div class="feature-card">
+            <span class="feature-icon">📊</span>
+            <h3>Detailed Statistics</h3>
+            <p>Track your progress with comprehensive statistics. Monitor your wins, losses, average scores, and improvement over time with beautiful charts and insights.</p>
+        </div>
+        <div class="feature-card">
+            <span class="feature-icon">🥇</span>
+            <h3>Global Leaderboards</h3>
+            <p>Compete with players worldwide and see how you rank. Climb the leaderboards, earn your place among the top players, and showcase your ThirtyOne mastery.</p>
+        </div>
+    </div>
+</section>
 
-    <script>
-        // Check if this is an email confirmation callback
-        const urlParams = new URLSearchParams(window.location.search);
-        const urlHash = new URLSearchParams(window.location.hash.substring(1));
+<script>
+    // Check if this is an email confirmation callback
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlHash = new URLSearchParams(window.location.hash.substring(1));
 
-        // Supabase can send tokens in either query params or hash fragments
-        const accessToken = urlParams.get('access_token') || urlHash.get('access_token');
-        const refreshToken = urlParams.get('refresh_token') || urlHash.get('refresh_token');
-        const code = urlParams.get('code') || urlHash.get('code'); // Authorization code
-        const type = urlParams.get('type') || urlHash.get('type');
-        const error = urlParams.get('error') || urlHash.get('error');
-        const errorDescription = urlParams.get('error_description') || urlHash.get('error_description');
+    // Supabase can send tokens in either query params or hash fragments
+    const accessToken = urlParams.get('access_token') || urlHash.get('access_token');
+    const refreshToken = urlParams.get('refresh_token') || urlHash.get('refresh_token');
+    const code = urlParams.get('code') || urlHash.get('code'); // Authorization code
+    const type = urlParams.get('type') || urlHash.get('type');
+    const error = urlParams.get('error') || urlHash.get('error');
+    const errorDescription = urlParams.get('error_description') || urlHash.get('error_description');
 
-        // Additional Supabase verification parameters
-        const tokenHash = urlParams.get('token_hash') || urlHash.get('token_hash');
-        const expiresAt = urlParams.get('expires_at') || urlHash.get('expires_at');
+    // Additional Supabase verification parameters
+    const tokenHash = urlParams.get('token_hash') || urlHash.get('token_hash');
+    const expiresAt = urlParams.get('expires_at') || urlHash.get('expires_at');
 
-        console.log('URL params:', {
-            accessToken: !!accessToken,
-            refreshToken: !!refreshToken,
-            code: !!code,
-            type,
-            error,
-            errorDescription,
-            tokenHash: !!tokenHash,
-            expiresAt: !!expiresAt
-        });
-        console.log('Full URL:', window.location.href);
-        console.log('Query params:', window.location.search);
-        console.log('Hash fragment:', window.location.hash);
+    console.log('URL params:', {
+        accessToken: !!accessToken,
+        refreshToken: !!refreshToken,
+        code: !!code,
+        type,
+        error,
+        errorDescription,
+        tokenHash: !!tokenHash,
+        expiresAt: !!expiresAt
+    });
+    console.log('Full URL:', window.location.href);
+    console.log('Query params:', window.location.search);
+    console.log('Hash fragment:', window.location.hash);
 
-        if (error) {
-            // Show error message
-            const successMessage = document.getElementById('successMessage');
-            successMessage.innerHTML = `
+    if (error) {
+        // Show error message
+        const successMessage = document.getElementById('successMessage');
+        successMessage.innerHTML = `
                 <h3>❌ Verification Failed</h3>
                 <p>There was an error verifying your email: ${errorDescription || error}</p>
                 <p>Please try registering again or contact support.</p>
             `;
-            successMessage.style.background = 'rgba(18, 69, 89, 0.3)';
-            successMessage.style.borderColor = 'var(--navy)';
-            successMessage.classList.add('show');
-        } else if (
-            // Primary conditions: access token with signup/confirmation type
-            (accessToken && (type === 'signup' || type === 'email_confirmation')) ||
-            // Alternative: authorization code indicates successful verification
-            code ||
-            // Alternative: token_hash indicates successful verification
-            tokenHash ||
-            // Alternative: refresh token indicates successful auth
-            refreshToken ||
-            // Alternative: access token with expires_at indicates successful auth
-            (accessToken && expiresAt)
-        ) {
-            // Show success message
-            console.log('Showing success message for verification success');
-            document.getElementById('successMessage').classList.add('show');
+        successMessage.style.background = 'rgba(18, 69, 89, 0.3)';
+        successMessage.style.borderColor = 'var(--navy)';
+        successMessage.classList.add('show');
+    } else if (
+        // Primary conditions: access token with signup/confirmation type
+        (accessToken && (type === 'signup' || type === 'email_confirmation')) ||
+        // Alternative: authorization code indicates successful verification
+        code ||
+        // Alternative: token_hash indicates successful verification
+        tokenHash ||
+        // Alternative: refresh token indicates successful auth
+        refreshToken ||
+        // Alternative: access token with expires_at indicates successful auth
+        (accessToken && expiresAt)
+    ) {
+        // Show success message
+        console.log('Showing success message for verification success');
+        document.getElementById('successMessage').classList.add('show');
 
-            // Scroll to success message
-            document.getElementById('successMessage').scrollIntoView({
-                behavior: 'smooth'
-            });
+        // Scroll to success message
+        document.getElementById('successMessage').scrollIntoView({
+            behavior: 'smooth'
+        });
 
-            // Clean up the URL after showing the message
-            setTimeout(() => {
-                const cleanUrl = window.location.origin + window.location.pathname;
-                window.history.replaceState({}, document.title, cleanUrl);
-            }, 3000);
-        }
+        // Clean up the URL after showing the message
+        setTimeout(() => {
+            const cleanUrl = window.location.origin + window.location.pathname;
+            window.history.replaceState({}, document.title, cleanUrl);
+        }, 3000);
+    }
 
-        // Update download links when you have actual app store URLs
-        // document.querySelector('.download-button.ios').href = 'https://apps.apple.com/app/your-app';
-        // document.querySelector('.download-button:not(.ios)').href = 'https://play.google.com/store/apps/details?id=com.golackey.thirtyone';
-    </script>
+    // Update download links when you have actual app store URLs
+    // document.querySelector('.download-button.ios').href = 'https://apps.apple.com/app/your-app';
+    // document.querySelector('.download-button:not(.ios)').href = 'https://play.google.com/store/apps/details?id=com.golackey.thirtyone';
+</script>
 </body>
 </html>

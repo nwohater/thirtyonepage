@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ThirtyOne - Authentication</title>
+    <style>
+        :root {
+            --dark-navy: #01161E;
+            --navy: #124559;
+            --teal: #598392;
+            --sage: #AEC3B0;
+            --cream: #EFF6E0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, var(--dark-navy) 0%, var(--navy) 40%, var(--teal) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: var(--navy);
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        p {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .button {
+            display: inline-block;
+            background: var(--navy);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            margin: 10px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background: var(--dark-navy);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(18, 69, 89, 0.3);
+        }
+
+        .button.secondary {
+            background: var(--teal);
+        }
+
+        .button.secondary:hover {
+            background: var(--sage);
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--navy);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .status {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .download-links {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .download-links p {
+            font-size: 14px;
+            color: #999;
+            margin-bottom: 10px;
+        }
+
+        .download-links a {
+            color: var(--navy);
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        .download-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">♠️</div>
+        <h1>ThirtyOne</h1>
+        
+        <div id="loading">
+            <div class="spinner"></div>
+            <p>Processing authentication...</p>
+        </div>
+
+        <div id="content" style="display: none;">
+            <div id="status"></div>
+            <div id="actions"></div>
+        </div>
+    </div>
+
+    <script>
+        // Get URL parameters from both query string and hash
+        const urlParams = new URLSearchParams(window.location.search);
+        const hash = window.location.hash.substring(1);
+        const hashParams = new URLSearchParams(hash);
+        
+        // Combine both query and hash parameters
+        const allParams = new URLSearchParams();
+        for (const [key, value] of urlParams) {
+            allParams.set(key, value);
+        }
+        for (const [key, value] of hashParams) {
+            allParams.set(key, value);
+        }
+
+        const accessToken = allParams.get('access_token');
+        const refreshToken = allParams.get('refresh_token');
+        const type = allParams.get('type');
+        const error = allParams.get('error');
+        const errorDescription = allParams.get('error_description');
+
+        console.log('Auth callback params:', {
+            type,
+            hasAccessToken: !!accessToken,
+            hasRefreshToken: !!refreshToken,
+            error
+        });
+
+        function showContent(statusHtml, actionsHtml) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('content').style.display = 'block';
+            document.getElementById('status').innerHTML = statusHtml;
+            document.getElementById('actions').innerHTML = actionsHtml;
+        }
+
+        function tryOpenApp() {
+            // Build deep link with all parameters
+            const deepLink = 'io.supabase.thirtyone://auth/callback?' + allParams.toString();
+            
+            console.log('Attempting to open app with deep link:', deepLink);
+            
+            // Try to open the app
+            window.location.href = deepLink;
+            
+            // If app doesn't open in 2.5 seconds, show download options
+            setTimeout(() => {
+                showContent(
+                    '<div class="status error"><strong>App Not Installed</strong></div>',
+                    `
+                        <p>Download ThirtyOne to continue:</p>
+                        <div class="download-links">
+                            <a href="https://apps.apple.com/app/your-app-id" class="button">📱 Download for iOS</a>
+                            <a href="https://play.google.com/store/apps/details?id=com.golackey.thirtyone" class="button">🤖 Download for Android</a>
+                        </div>
+                        <div class="download-links">
+                            <p>Already have the app?</p>
+                            <button onclick="tryOpenApp()" class="button secondary">Try Opening Again</button>
+                        </div>
+                    `
+                );
+            }, 2500);
+        }
+
+        // Handle different authentication types
+        if (error) {
+            // Authentication error
+            showContent(
+                `<div class="status error">
+                    <strong>Authentication Error</strong><br>
+                    ${errorDescription || error}
+                </div>`,
+                '<a href="/" class="button">Return Home</a>'
+            );
+        } else if (type === 'recovery') {
+            // Password recovery
+            console.log('Password recovery detected');
+            showContent(
+                '<div class="status success">✅ Password reset link verified!</div>',
+                `
+                    <p>Click below to open ThirtyOne and set your new password:</p>
+                    <button onclick="tryOpenApp()" class="button">Open ThirtyOne App</button>
+                    <div class="download-links">
+                        <p>Don't have the app installed?</p>
+                        <a href="https://apps.apple.com/app/your-app-id">Download for iOS</a> | 
+                        <a href="https://play.google.com/store/apps/details?id=com.golackey.thirtyone">Download for Android</a>
+                    </div>
+                `
+            );
+        } else if (accessToken || refreshToken) {
+            // Successful OAuth or email confirmation
+            const message = type === 'signup' ? '✅ Email confirmed!' : '✅ Sign in successful!';
+            console.log('Auth successful, attempting to open app');
+            
+            showContent(
+                `<div class="status success">${message}</div>`,
+                `
+                    <p>Opening ThirtyOne...</p>
+                    <button onclick="tryOpenApp()" class="button">Open App Now</button>
+                `
+            );
+            
+            // Auto-try to open app after 1 second
+            setTimeout(tryOpenApp, 1000);
+        } else {
+            // No valid parameters
+            showContent(
+                '<div class="status error">Invalid authentication link</div>',
+                '<a href="/" class="button">Return Home</a>'
+            );
+        }
+    </script>
+</body>
+</html>
+
